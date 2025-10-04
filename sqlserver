@@ -1,0 +1,162 @@
+
+````markdown
+# Installing Microsoft SQL Server 2022 on Ubuntu 24.04 (Noble)
+
+Ubuntu 24.04 “Noble” is not yet officially supported by Microsoft SQL Server 2022, but you can use the Ubuntu 22.04 packages as a workaround. This guide will walk you through installing **SQL Server Developer Edition** on your mini PC and configuring it for local network access.
+
+---
+
+## Prerequisites
+
+- Ubuntu 24.04 running on your mini PC
+- SSH access to your mini PC
+- Static IP setup for RJ45 direct connection (optional for local network access)
+
+---
+
+## Step 1: Remove Existing Microsoft GPG Keys (Optional)
+
+Clean up any previous keys to avoid conflicts:
+
+```bash
+sudo rm -f /usr/share/keyrings/microsoft.gpg
+sudo rm -f /usr/share/keyrings/msprod.gpg
+````
+
+---
+
+## Step 2: Import Microsoft GPG Key
+
+```bash
+sudo curl https://packages.microsoft.com/keys/microsoft.asc | sudo tee /etc/apt/trusted.gpg.d/microsoft.asc
+```
+
+---
+
+## Step 3: Add SQL Server 2022 Repository for Ubuntu 22.04
+
+Since Ubuntu 24.04 isn't officially supported, we use the 22.04 repository:
+
+```bash
+sudo curl -fsSL https://packages.microsoft.com/config/ubuntu/22.04/mssql-server-2022.list | sudo tee /etc/apt/sources.list.d/mssql-server-2022.list
+sudo apt update
+```
+
+---
+
+## Step 4: Install SQL Server
+
+```bash
+sudo apt install -y mssql-server
+```
+
+---
+
+## Step 5: Configure SQL Server
+
+```bash
+sudo /opt/mssql/bin/mssql-conf setup
+```
+
+During setup:
+
+1. Accept the license terms
+2. Choose **Developer Edition** (free)
+3. Set a strong `SA` password
+
+---
+
+## Step 6: Verify SQL Server is Running
+
+```bash
+systemctl status mssql-server
+```
+
+You should see `active (running)`.
+
+---
+
+## Step 7: Install SQL Server Command-Line Tools
+
+```bash
+sudo apt install -y mssql-tools unixodbc-dev
+```
+
+Add the tools to your PATH:
+
+```bash
+echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
+source ~/.bashrc
+```
+
+Now you can use `sqlcmd` from the terminal.
+
+---
+
+## Step 8: Test SQL Server Locally
+
+```bash
+sqlcmd -S localhost -U SA -P 'YourStrong!Passw0rd'
+```
+
+You should see the `1>` prompt for running queries.
+
+---
+
+## Step 9: Allow Remote Access over RJ45
+
+1. Open the SQL Server port through the firewall:
+
+```bash
+sudo ufw allow 1433/tcp
+sudo ufw reload
+```
+
+2. Verify SQL Server is listening on port 1433:
+
+```bash
+sudo netstat -tulnp | grep 1433
+```
+
+---
+
+## Step 10: Connect from Windows PC
+
+You can use **Azure Data Studio** or **SQL Server Management Studio (SSMS)**:
+
+* **Server:** `192.168.50.2`
+* **Authentication:** SQL Server Authentication
+* **Login:** `SA`
+* **Password:** The one you set during setup
+
+Or via command line:
+
+```powershell
+sqlcmd -S 192.168.50.2 -U SA -P 'YourStrong!Passw0rd'
+```
+
+---
+
+## Troubleshooting Tips
+
+* **Missing Dependencies:** If you encounter errors like `libldap-common` missing:
+
+```bash
+sudo apt install libldap-common
+```
+
+* **Service Not Starting:** Check logs:
+
+```bash
+sudo journalctl -u mssql-server
+```
+
+---
+
+## Conclusion
+
+You now have **SQL Server Developer Edition running on Ubuntu 24.04**, accessible locally via RJ45. This setup allows for development, testing, and local database management even though official 24.04 support isn’t yet available.
+
+```
+
+---
