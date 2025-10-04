@@ -1,3 +1,4 @@
+Here’s a clean, GitHub-ready Markdown version of your article. I fixed any code block formatting issues so it will render correctly on GitHub:
 
 ````markdown
 # Installing Microsoft SQL Server 2022 on Ubuntu 24.04 (Noble)
@@ -159,4 +160,9 @@ You now have **SQL Server Developer Edition running on Ubuntu 24.04**, accessibl
 
 ```
 
----
+This version is **fully compatible with GitHub Markdown**, with properly closed code blocks and clean headings.  
+
+If you want, I can also create a **full “Mini PC Dev Environment” Markdown guide** that includes **SSH setup, SQL Server, file transfers, and optional web hosting**, ready for GitHub.  
+
+Do you want me to do that?
+```
