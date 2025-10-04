@@ -1,4 +1,3 @@
-Of course, here is the GitHub-ready Markdown for installing SQL Server on Ubuntu 24.04. You can copy and paste the content from the code block below directly into a `.md` file on GitHub.
 
 ````markdown
 # 🚀 Installing Microsoft SQL Server 2022 on Ubuntu 24.04 (Noble)
